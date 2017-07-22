@@ -12,10 +12,11 @@ export default class View extends Component {
     this.state = {
       textFieldValue: '',
       moment: '',
-      moments: [{name: 'Poet'}]
+      moments: [{ name: 'Poet' }]
     };
     this.handleTextFieldChange = this.handleTextFieldChange.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
+    this.fetchAllMoments = this.fetchAllMoments.bind(this);
     this.moment = {
       id: 0,
       userId: 2,
@@ -84,6 +85,7 @@ export default class View extends Component {
         })
         .then((y) => {
           console.log(y);
+          this.fetchAllMoments();
         })
         .catch(err =>
           /* eslint-disable no-console */
@@ -95,8 +97,11 @@ export default class View extends Component {
   fetchAllMoments() {
     Axios.get('/api/moments')
       .then((latestMoments) => {
-        this.setState({
-          moments: latestMoments
+        latestMoments.forEach(({ media }) => {
+          Axios.get(media.uri, media.s3Cred)
+            .then((data) => {
+              console.log(data);
+            })
         });
       });
   }
