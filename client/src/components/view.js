@@ -4,16 +4,19 @@ import Axios from 'axios';
 import Promise from 'bluebird';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import MomentList from './momentList.js';
 
 export default class View extends Component {
   constructor(props) {
     super(props);
     this.state = {
       textFieldValue: '',
-      moment: ''
+      moment: '',
+      moments: [{ name: 'Poet' }]
     };
     this.handleTextFieldChange = this.handleTextFieldChange.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
+    this.fetchAllMoments = this.fetchAllMoments.bind(this);
     this.moment = {
       id: 0,
       userId: 1,
@@ -62,34 +65,47 @@ export default class View extends Component {
       Axios.post('/api/moments', {
         moment: this.moment
       })
-      .then((res) => {
-        const {
-          keys,
-          media
-        } = res.data.moment;
-        return Promise.map(keys, (key) => {
-          res.data.moment.media.text.s3Cred = this.cred;
-          this.setState({
-            moment: res.data.moment
-          });
-          const { uri } = media[key];
-          console.log('fillleeeee', this.constructPostData(res)[0].has('key'));
-          return Axios.put(uri, this.constructPostData(res)[0]);
+        .then((res) => {
+          const {
+            keys,
+            media
+          } = res.data.moment;
+          return Promise.map(keys, (key) => {
+            res.data.moment.media.text.s3Cred = this.cred;
+            this.setState({
+              moment: res.data.moment
+            });
+            const { uri } = media[key];
+            console.log('fillleeeee', this.constructPostData(res)[0].has('key'));
+            return Axios.put(uri, this.constructPostData(res)[0]);
           // return Axios.get(uri, this.cred);
-        });
-      })
-      .then((x) => {
-        console.log(x);
-        return Axios.post('/api/bktd', { moment: this.state.moment });
-      })
-      .then((y) => {
-        console.log(y);
-      })
-      .catch(err =>
-         /* eslint-disable no-console */
-         console.log('got error trying to handshake: ', err));
-        /* eslint-enable no-console */
+          });
+        })
+        .then((x) => {
+          console.log(x);
+          return Axios.post('/api/bktd', { moment: this.state.moment });
+        })
+        .then((y) => {
+          console.log(y);
+          this.fetchAllMoments();
+        })
+        .catch(err =>
+          /* eslint-disable no-console */
+          console.log('got error trying to handshake: ', err));
+      /* eslint-enable no-console */
     };
+  }
+
+  fetchAllMoments() {
+    Axios.get('/api/moments')
+      .then((latestMoments) => {
+        latestMoments.forEach(({ media }) => {
+          Axios.get(media.uri, media.s3Cred)
+            .then((data) => {
+              console.log(data);
+            })
+        });
+      });
   }
 
   handleTextFieldChange(e) {
@@ -123,6 +139,7 @@ export default class View extends Component {
         />
         <input type="file" />
         <RaisedButton onClick={this.handleButtonClick} label="Internalize" style={style} />
+        <MomentList moments={this.state.moments} />
       </div>
     );
   }
