@@ -29,7 +29,6 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "bookshelf": "^0.10.3",
-    "chai": "4.1.0",
     "chart.js": "2.6.0",
     "config": "^1.26.1",
     "connect-flash": "^0.1.1",
@@ -60,12 +59,14 @@
     "react-tap-event-plugin": "2.0.1",
     "redis": "^2.7.1",
     "redux": "^3.7.2",
+    "redux-promise": "0.5.3",
+    "redux-thunk": "2.2.0",
     "webpack": "2",
     "webpack-dev-server": "^2.4.2",
     "yarn": "^0.27.5"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.1.0",
     "eslint": "3.19.0",
     "eslint-config-airbnb": "15.0.2",
     "eslint-config-airbnb-base": "11.2.0",
