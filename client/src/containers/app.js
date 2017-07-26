@@ -1,42 +1,48 @@
 import React, { Component } from 'react';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import actions from '../actions';
 import DoughnutChart from '../components/doughnut';
+import MomentList from '../components/momentList';
 
-injectTapEventPlugin();
 
 class App extends Component {
 
   componentDidMount() {
     this.props.getDoughnut();
+    this.props.getMomentList();
   }
 
   render() {
     return (
-      <MuiThemeProvider>
+      <div>
         <DoughnutChart />
-      </MuiThemeProvider>
+        {this.props.momentList ?
+          <MomentList moments={this.props.momentList} />
+          : null}
+      </div>
     );
   }
 }
 
 const mapStateToProps = state =>
   ({
-    summary: state.summary
+    summary: state.summary,
+    momentList: state.momentList
   });
 
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    getDoughnut: actions.getDoughnut
+    getDoughnut: actions.getDoughnut,
+    getMomentList: actions.getMomentList
   }, dispatch);
 
 App.propTypes = {
-  getDoughnut: PropTypes.func
+  getDoughnut: PropTypes.func,
+  getMomentList: PropTypes.func,
+  momentList: PropTypes.arrayOf(PropTypes.object)
 };
 
 
