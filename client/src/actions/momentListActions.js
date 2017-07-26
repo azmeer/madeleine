@@ -7,12 +7,12 @@ const setMomentList = momentList =>
   });
 
 const getMomentList = () => (dispatch) => {
-  axios.get('/api/news')
+  axios.get('/api/moments')
   .then(result =>
     dispatch(setMomentList(result.data))
   )
   .catch(error =>
-    console.error('Failed to fetch news: ', error) // eslint-disable-line no-console
+    console.error('Failed to get moments: ', error) // eslint-disable-line no-console
   );
 };
 
