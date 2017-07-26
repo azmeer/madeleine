@@ -6,7 +6,6 @@ import actions from '../actions';
 import DoughnutChart from '../components/doughnut';
 import MomentList from '../components/momentList';
 
-
 class App extends Component {
 
   componentDidMount() {
@@ -18,9 +17,7 @@ class App extends Component {
     return (
       <div>
         <DoughnutChart />
-        {this.props.momentList ?
-          <MomentList moments={this.props.momentList} />
-          : null}
+        <MomentList moments={this.props.momentList} />
       </div>
     );
   }
