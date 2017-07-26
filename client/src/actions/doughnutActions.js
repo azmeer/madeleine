@@ -9,7 +9,7 @@ const setDoughnut = summary =>
 const getDoughnut = () => (dispatch) => {
   axios.get('/api/process')
   .then(result =>
-    dispatch(setDoughnut(result.data.aggregate))
+    dispatch(setDoughnut(result.data.aggregate.summary))
   )
   .catch(error =>
     console.error('Failed to get doughnut: ', error) // eslint-disable-line no-console
