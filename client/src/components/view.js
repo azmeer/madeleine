@@ -133,7 +133,7 @@ export default class View extends Component {
     })
     .then(res => this.setState({ moment: res.data.moment }))
     .then(() => Axios.post('/api/bktd', { moment: this.state.moment }))
-    .then(() => Axios.get('api/moments', { moment: this.state.moment }))
+    .then(() => Axios.get('/api/moments', { moment: this.state.moment }))
     .then(z => this.fetchAllMomentMedia(z.data))
     .catch(err =>
         /* eslint-disable no-console */
